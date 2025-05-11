@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sneakers - Fall Limited Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 24px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .menu li {
+            margin-left: 30px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #aaa;
+            transition: color 0.3s;
+        }
+
+        .menu a:hover {
+            color: #333;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .cart {
+            position: relative;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ff7e1b;
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+            cursor: pointer;
+        }
+
+        .profile-img:hover {
+            border-color: #ff7e1b;
+        }
+
+        /* Product Section */
+        .product-section {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 50px 0;
+            gap: 50px;
+        }
+
+        .product-images {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            object-fit: contain;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .main-image:hover {
+            transform: scale(1.02);
+        }
+
+        .thumbnail-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .thumbnail {
+            width: 20%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: opacity 0.3s, border 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail:hover {
+            opacity: 0.7;
+        }
+
+        .thumbnail.active {
+            border-color: #ff7e1b;
+            opacity: 0.7;
+        }
+
+        .product-info {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .company-name {
+            color: #ff7e1b;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .product-title {
+            font-size: 36px;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .product-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .price-container {
+            margin-bottom: 25px;
+        }
+
+        .current-price {
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .discount {
+            background-color: #ffeee2;
+            color: #ff7e1b;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .original-price {
+            color: #b9b9b9;
+            text-decoration: line-through;
+            margin-top: 10px;
+        }
+
+        .add-to-cart-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            background-color: #f7f8fd;
+            border-radius: 8px;
+            padding: 10px;
+            width: 150px;
+            justify-content: space-between;
+        }
+
+        .quantity-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #ff7e1b;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .add-to-cart-btn {
+            flex: 1;
+            background-color: #ff7e1b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #ffab6a;
+        }
+
+        /* Modal for enlarged image */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #ff7e1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="#" class="logo">sneakers</a>
+            <ul class="menu">
+                <li><a href="#">Collections</a></li>
+                <li><a href="#">Men</a></li>
+                <li><a href="#">Women</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="user-actions">
+                <div class="cart">
+                    <svg width="22" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M20.925 3.641H3.863L3.61.816A.896.896 0 0 0 2.717 0H.897a.896.896 0 1 0 0 1.792h1l1.031 11.483c.073.828.52 1.726 1.291 2.336C2.83 17.385 4.099 20 6.359 20c1.875 0 3.197-1.87 2.554-3.642h4.905c-.642 1.77.677 3.642 2.555 3.642a2.72 2.72 0 0 0 2.717-2.717 2.72 2.72 0 0 0-2.717-2.717H6.365c-.681 0-1.274-.41-1.53-1.009l14.321-.842a.896.896 0 0 0 .817-.677l1.821-7.283a.897.897 0 0 0-.87-1.114ZM6.358 18.208a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm10.015 0a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm2.021-7.243-13.8.81-.57-6.341h15.753l-1.383 5.53Z" fill="#69707D" fill-rule="nonzero"/></svg>
+                    <span class="cart-count">0</span>
+                </div>
+                <img src="C:\Users\moham\OneDrive\Desktop\sneaker\IMG-20241019-WA0058 (3).png " alt="Profile" class="profile-img">
+            </div>
+        </nav>
+
+        <div class="product-section">
+            <div class="product-images">
+                <img src="C:\Users\moham\OneDrive\Desktop\sneaker\assert\Screenshot 2025-05-08 124322.png" alt="Fall Limited Edition Sneakers" class="main-image" id="main-product-image">
+                <div class="thumbnail-container">
+                    <img src="C:\Users\moham\OneDrive\Desktop\sneaker\assert\Screenshot 2025-05-08 130009.png" alt="Sneaker Thumbnail 1" class="thumbnail active" data-index="0">
+                    <img src="C:\Users\moham\OneDrive\Desktop\sneaker\assert\Screenshot 2025-05-08 130250.png" alt="Sneaker Thumbnail 2" class="thumbnail" data-index="1">
+                    <img src="C:\Users\moham\OneDrive\Desktop\sneaker\assert\Screenshot 2025-05-08 202506.png" alt="Sneaker Thumbnail 3" class="thumbnail" data-index="2">
+                    <img src="C:\Users\moham\OneDrive\Desktop\sneaker\assert\Screenshot 2025-05-08 124322.png" alt="Sneaker Thumbnail 4" class="thumbnail" data-index="3">
+                </div>
+            </div>
+
+            <div class="product-info">
+                <p class="company-name">Sneaker Company</p>
+                <h1 class="product-title">Fall Limited Edition Sneakers</h1>
+                <p class="product-description">These low-profile sneakers are your perfect casual wear companion. Featuring a durable rubber outer sole, they'll withstand everything the weather can offer.</p>
+                
+                <div class="price-container">
+                    <div style="display: flex; align-items: center;">
+                        <span class="current-price">$125.00</span>
+                        <span class="discount">50%</span>
+                    </div>
+                    <p class="original-price">$250.00</p>
+                </div>
+                
+                <div class="add-to-cart-section">
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" id="decrease-qty">-</button>
+                        <span class="quantity">0</span>
+                        <button class="quantity-btn" id="increase-qty">+</button>
+                    </div>
+                    <button class="add-to-cart-btn">
+                        <svg width="22" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M20.925 3.641H3.863L3.61.816A.896.896 0 0 0 2.717 0H.897a.896.896 0 1 0 0 1.792h1l1.031 11.483c.073.828.52 1.726 1.291 2.336C2.83 17.385 4.099 20 6.359 20c1.875 0 3.197-1.87 2.554-3.642h4.905c-.642 1.77.677 3.642 2.555 3.642a2.72 2.72 0 0 0 2.717-2.717 2.72 2.72 0 0 0-2.717-2.717H6.365c-.681 0-1.274-.41-1.53-1.009l14.321-.842a.896.896 0 0 0 .817-.677l1.821-7.283a.897.897 0 0 0-.87-1.114ZM6.358 18.208a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm10.015 0a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm2.021-7.243-13.8.81-.57-6.341h15.753l-1.383 5.53Z" fill="#fff" fill-rule="nonzero"/></svg>
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for enlarged image -->
+    <div class="image-modal" id="image-modal">
+        <span class="close-modal" id="close-modal">&times;</span>
+        <img src="C:\Users\moham\OneDrive\Pictures\Screenshots\Screenshot 2025-05-08 124322.png" alt="Enlarged sneaker image" class="modal-content" id="modal-image">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Quantity selector functionality
+            const minusBtn = document.getElementById('decrease-qty');
+            const plusBtn = document.getElementById('increase-qty');
+            const quantityDisplay = document.querySelector('.quantity');
+            let quantity = 0;
+
+            minusBtn.addEventListener('click', function() {
+                if (quantity > 0) {
+                    quantity--;
+                    quantityDisplay.textContent = quantity;
+                }
+            });
+
+            plusBtn.addEventListener('click', function() {
+                quantity++;
+                quantityDisplay.textContent = quantity;
+            });
+            
+            // Add to cart functionality
+            const addToCartBtn = document.querySelector('.add-to-cart-btn');
+            const cartCount = document.querySelector('.cart-count');
+            let cartItems = 0;
+            
+            addToCartBtn.addEventListener('click', function() {
+                if (quantity > 0) {
+                    cartItems += quantity;
+                    cartCount.textContent = cartItems;
+                    alert(`${quantity} item(s) added to cart!`);
+                    // Reset quantity after adding to cart
+                    quantity = 0;
+                    quantityDisplay.textContent = quantity;
+                } else {
+                    alert('Please select at least 1 item.');
+                }
+            });
+
+            // Image gallery functionality
+            const mainImage = document.getElementById('main-product-image');
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            const closeModal = document.getElementById('close-modal');
+            
+            // Define image URLs with your actual image paths
+            const imageUrls = [
+                'C:\\Users\\moham\\OneDrive\\Pictures\\Screenshots\\Screenshot 2025-05-08 124322.png',
+                'C:\\Users\\moham\\OneDrive\\Pictures\\Screenshots\\Screenshot 2025-05-08 130009.png',
+                'C:\\Users\\moham\\OneDrive\\Pictures\\Screenshots\\Screenshot 2025-05-08 130250.png',
+                'C:\\Users\\moham\\OneDrive\\Pictures\\Screenshots\\Screenshot 2025-05-08 202506.png'
+            ];
+            
+            // Set click event for thumbnails
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', function() {
+                    // Remove active class from all thumbnails
+                    thumbnails.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked thumbnail
+                    this.classList.add('active');
+                    
+                    // Update main image source
+                    const index = parseInt(this.getAttribute('data-index'));
+                    mainImage.src = imageUrls[index];
+                });
+            });
+            
+            // Open modal when clicking on main image
+            mainImage.addEventListener('click', function() {
+                modal.style.display = 'flex';
+                modalImage.src = mainImage.src;
+            });
+            
+            // Close modal
+            closeModal.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside the image
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
